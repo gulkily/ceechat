@@ -1,3 +1,14 @@
+## Implementation Notes
+1. Sort messages by timestamp when displaying
+2. Sanitize all user inputs
+3. Handle both JSON and form-data POST requests
+4. Pressing Enter in the message form sends message (Shift+Enter for new line)
+5. The chat container should scroll to the bottom when new messages are added
+6. All error responses include descriptive messages
+7. Messages are identified by author's key fingerprint
+8. Do not use venv
+9. Messages should be pushed to GitHub automatically after being stored
+
 # CeeChat Minimal Implementation Spec
 
 Create a secure chat system with message signing. Messages are stored as text files and signed cryptographically. Each message is identified by the fingerprint of its author's public key.
@@ -61,9 +72,6 @@ POST /messages
 <head>
     <title>CeeChat</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <noscript>
-        <link rel="stylesheet" href="/static/css/noscript.css">
-    </noscript>
 </head>
 <body>
     <div class="container">
@@ -72,14 +80,9 @@ POST /messages
         </div>
         
         <div id="messages">
-            <!-- No-JS refresh -->
-            <form method="GET" action="/" class="nojs-only">
-                <button type="submit">Refresh</button>
-            </form>
             <div id="messages-container"></div>
         </div>
         
-        <!-- Message form works with/without JS -->
         <form method="POST" action="/messages" class="message-form">
             <textarea name="content" required></textarea>
             <button type="submit">Send</button>
@@ -192,13 +195,3 @@ Signature: {signature}
         
         (self.messages_dir / filename).write_text(message)
         return filename
-```
-
-## Implementation Notes
-1. Sort messages by timestamp when displaying
-2. Sanitize all user inputs
-3. Handle both JSON and form-data POST requests
-4. Pressing Enter in the message form sends message (Shift+Enter for new line)
-5. The chat container should scroll to the bottom when new messages are added
-6. All error responses include descriptive messages
-7. Messages are identified by author's key fingerprint
